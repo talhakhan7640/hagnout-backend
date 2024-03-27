@@ -21,7 +21,7 @@ app.use('/room', roomRouter);
 try { 
     mongoose.connect(process.env.URI)
     .then(() => {
-        app.listen(5000, () => {
+        app.listen(process.env.PORT, () => {
             console.log(`server started`)
         })
     }).catch((error) => {
