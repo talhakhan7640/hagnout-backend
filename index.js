@@ -18,10 +18,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use('/user', userRouter);
 app.use('/room', roomRouter);
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+
 try { 
     mongoose.connect(process.env.URI)
     .then(() => {
-        app.listen(process.env.PORT, () => {
+        app.listen(5000, () => {
             console.log(`server started`)
         })
     }).catch((error) => {
