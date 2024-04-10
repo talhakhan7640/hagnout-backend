@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // use routes
-app.use('/user', userRouter);
-app.use('/room', roomRouter);
+app.use('/users', userRouter);
+app.use('/rooms', roomRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
