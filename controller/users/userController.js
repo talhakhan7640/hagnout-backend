@@ -22,7 +22,7 @@ export const userSignupController =  async (request, response, next) => {
     } else {
         const docEmail = await userModel.findOne({ email: userEmail });
         if (docEmail) {
-            return response.send({
+            return response.status(409).send({
                 message: "Email already exist",
             });
         } else {
@@ -84,7 +84,7 @@ export const userLoginController = async (request, response) => {
             "RANDOM-TOKEN",
             { expiresIn: "24h" }
           );
-           console.log("login successfull")
+          console.log("login successfull")
           response.status(200).send({
             message: "Login successful",
             email: user.email,
@@ -101,7 +101,7 @@ export const userLoginController = async (request, response) => {
         });
     })
     .catch((error) => {
-         console.log("user not found")
+      console.log("user not found.")
       response.status(404).send({
         message: "User not found!",
         error,
