@@ -11,10 +11,15 @@ const roomSchema = new mongoose.Schema({
         require: true,
         unique: true,
     },
-    // roomAdmin: {
-    //     type: String,
-    //     require: true,
-    // }
+    roomUsers: {
+        type: [{
+            type: String
+        }],
+    },
+    roomAdmin: {
+        type: String,
+        require: true,
+    }
 })
 
 const roomModel = mongoose.model('Room', roomSchema);
