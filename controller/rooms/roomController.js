@@ -10,6 +10,7 @@ function randomString(length, chars) {
 export const createRoomController = async (request, response) => {
     const roomName = request.body.roomName;
     const roomId = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') + roomCount;
+    const roomAdmin = request.body.Admin;
     const room  =  await roomModel.findOne({roomName: roomName})
     console.log(room);
     if(room) {
@@ -20,16 +21,47 @@ export const createRoomController = async (request, response) => {
     } else {
         const newRoom = new roomModel({
             roomName: roomName,
-            roomId: roomId
+            roomId: roomId,
+            roomAdmin: roomAdmin
         })
         newRoom.save().then((result) => {
             console.log(result)
             response.status(201).send({
                 message: "room has been created",
                 room_name: roomName,
-                room_id: roomId
+                room_id: roomId,
+                roomAdmin: roomAdmin,
             })
         })
     }
     roomCount++;
+}
+
+export const fetchRoomsController = async (request, response) => {
+    const roomName = request.body.roomName;
+    // Check if room is present in the db
+    const room = await roomModel.find({'roomName': { $regex: '^' + roomName, $options: 'i' }})
+    
+    if(room.length != 0) {
+        console.log(room)
+        response.send(room);
+    }else {
+        console.log("No rooms found");
+        return response.status(409).send({
+            message: "No room found"
+        })
+    }
+};
+
+
+export const joinRoomController = async (request, response) => {
+    const roomId = request.body.roomId;
+    const username = request.body.username;
+
+    const room = await roomModel.findOne({'roomId': roomId});
+    var roomUsersCount = 0;
+    // room[1].roomUsers[roomUsersCount].username= username;
+    console.log(room);
+    room.roomUsers.push(username);
+    room.save();
 }
