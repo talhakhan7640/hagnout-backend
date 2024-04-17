@@ -14,7 +14,7 @@ export const createRoomController = async (request, response) => {
     const room  =  await roomModel.findOne({roomName: roomName})
     console.log(room);
     if(room) {
-        console.log("this room already exist: ");
+        console.log("this room already exist");
         return response.status(409).send({
             message: "room already exist",
         })
@@ -53,15 +53,23 @@ export const fetchRoomsController = async (request, response) => {
     }
 };
 
-
 export const joinRoomController = async (request, response) => {
     const roomId = request.body.roomId;
     const username = request.body.username;
 
     const room = await roomModel.findOne({'roomId': roomId});
-    var roomUsersCount = 0;
-    // room[1].roomUsers[roomUsersCount].username= username;
-    console.log(room);
-    room.roomUsers.push(username);
-    room.save();
+
+    const user = room.members.find((u) => u.username === username);
+    if(user === undefined){
+        room.members.push({username: username});
+        room.save();
+        return response.status(200).send({
+            message: "You are now member of " + room.roomName
+        })
+    }else {
+        return response.status(403).send({
+            message: "You are already a member of this room"
+        })
+    }
+
 }
