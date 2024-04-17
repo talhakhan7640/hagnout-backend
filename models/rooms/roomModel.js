@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+const membersSchema = new mongoose.Schema({username: String})
+
 const roomSchema = new mongoose.Schema({
     roomName: {
         type: String,
@@ -11,11 +13,12 @@ const roomSchema = new mongoose.Schema({
         require: true,
         unique: true,
     },
-    roomUsers: {
-        type: [{
-            type: String
-        }],
-    },
+    // members: {
+    //     username: [{
+    //         type: String
+    //     }]
+    // },
+    members: [membersSchema],
     roomAdmin: {
         type: String,
         require: true,
