@@ -2,6 +2,7 @@ import roomModel from "../../models/rooms/roomModel.js";
 
 var roomCount = 1;
 
+// *********** Create room controller ***********
 function randomString(length, chars) {
     var result = '';
     for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
@@ -37,6 +38,9 @@ export const createRoomController = async (request, response) => {
     roomCount++;
 }
 
+
+// *********** Fetch room controller ***********
+
 export const fetchRoomsController = async (request, response) => {
     const roomName = request.body.roomName;
     // Check if room is present in the db
@@ -52,6 +56,8 @@ export const fetchRoomsController = async (request, response) => {
         })
     }
 };
+
+// *********** Join room controller ***********
 
 export const joinRoomController = async (request, response) => {
     const roomId = request.body.roomId;
@@ -72,4 +78,32 @@ export const joinRoomController = async (request, response) => {
         })
     }
 
+}
+
+
+// *********** Delete room controller ***********
+export const deleteRoomController = async (request, response) => {
+  console.log("delete controller is here!!");
+  roomModel.deleteOne({roomId: request.params.id}).then(() => {
+    return response.send({
+        message: "Room has been successfully deleted"
+    })
+  })
+ 
+}
+
+
+// *********** Leave room controller ***********
+export const leaveRoomController = async (request, response) => {
+    const username = request.body.username;
+    const roomId = request.body.roomId;
+
+    const room = await roomModel.findOne({'roomId': roomId});
+    // room.members.pop({username: username});
+    room.members.remove({username: username});
+    room.save().then(() => {
+        response.send({
+            message: "you have left the room"
+        })
+    })
 }
