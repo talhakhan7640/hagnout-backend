@@ -25,6 +25,7 @@ export const createRoomController = async (request, response) => {
             roomId: roomId,
             roomAdmin: roomAdmin
         })
+        newRoom.members.push({username: roomAdmin});
         newRoom.save().then((result) => {
             console.log(result)
             response.status(201).send({
@@ -38,10 +39,9 @@ export const createRoomController = async (request, response) => {
     roomCount++;
 }
 
+// *********** Search room controller ***********
 
-// *********** Fetch room controller ***********
-
-export const fetchRoomsController = async (request, response) => {
+export const searchRoomsController = async (request, response) => {
     const roomName = request.body.roomName;
     // Check if room is present in the db
     const room = await roomModel.find({'roomName': { $regex: '^' + roomName, $options: 'i' }})
@@ -80,7 +80,6 @@ export const joinRoomController = async (request, response) => {
 
 }
 
-
 // *********** Delete room controller ***********
 export const deleteRoomController = async (request, response) => {
   console.log("delete controller is here!!");
@@ -91,7 +90,6 @@ export const deleteRoomController = async (request, response) => {
   })
  
 }
-
 
 // *********** Leave room controller ***********
 export const leaveRoomController = async (request, response) => {
@@ -106,4 +104,20 @@ export const leaveRoomController = async (request, response) => {
             message: "you have left the room"
         })
     })
+}
+
+
+// *********** Fetch room controller ***********
+export const fetchRoomsController = async(request, response) => {
+    const username = request.body.username;
+    var joinedRooms = [];
+
+    const rooms = await roomModel.find({});
+    rooms.map((room) => {
+        if(room.members.find((u) => u.username === username)){
+            joinedRooms.push(room);
+        }
+    })
+
+    response.send(joinedRooms);
 }
