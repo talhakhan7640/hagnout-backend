@@ -1,4 +1,5 @@
 import roomModel from "../../models/rooms/roomModel.js";
+import userModel from "../../models/users/userModel.js";
 
 var roomCount = 1;
 
@@ -12,7 +13,10 @@ export const createRoomController = async (request, response) => {
     const roomName = request.body.roomName;
     const roomId = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') + roomCount;
     const roomAdmin = request.body.Admin;
+
+    const userId = await userModel.findOne({username: roomAdmin}).then((user) => user._id);
     const room  =  await roomModel.findOne({roomName: roomName})
+
     console.log(room);
     if(room) {
         console.log("this room already exist");
@@ -25,7 +29,7 @@ export const createRoomController = async (request, response) => {
             roomId: roomId,
             roomAdmin: roomAdmin
         })
-        newRoom.members.push({username: roomAdmin});
+        newRoom.members.push({username: roomAdmin, userId: userId});
         newRoom.save().then((result) => {
             console.log(result)
             response.status(201).send({
@@ -33,6 +37,7 @@ export const createRoomController = async (request, response) => {
                 room_name: roomName,
                 room_id: roomId,
                 roomAdmin: roomAdmin,
+                id: newRoom._id,
             })
         })
     }
@@ -62,12 +67,14 @@ export const searchRoomsController = async (request, response) => {
 export const joinRoomController = async (request, response) => {
     const roomId = request.body.roomId;
     const username = request.body.username;
+    const {userId} = request.body;
 
     const room = await roomModel.findOne({'roomId': roomId});
+    const id = await userModel.findOne({'username' : username})
 
     const user = room.members.find((u) => u.username === username);
     if(user === undefined){
-        room.members.push({username: username});
+        room.members.push({username, userId});
         room.save();
         return response.status(200).send({
             message: "You are now member of " + room.roomName
