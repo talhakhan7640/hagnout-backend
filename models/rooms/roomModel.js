@@ -1,6 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
+import { messageSchema } from "../messages/messages.js";
 
-const membersSchema = new mongoose.Schema({username: String})
+const membersSchema = new mongoose.Schema({
+  username: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
 
 const roomSchema = new mongoose.Schema({
     roomName: {
@@ -13,11 +21,7 @@ const roomSchema = new mongoose.Schema({
         require: true,
         unique: true,
     },
-    // members: {
-    //     username: [{
-    //         type: String
-    //     }]
-    // },
+    conversations: [messageSchema],
     members: [membersSchema],
     roomAdmin: {
         type: String,
