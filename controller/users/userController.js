@@ -84,10 +84,12 @@ export const userLoginController = async (request, response) => {
             "RANDOM-TOKEN",
             { expiresIn: "24h" }
           );
+          
           console.log("login successfull")
           response.status(200).send({
             message: "Login successful",
             email: user.email,
+            userIid: user._id,
             token,
           });
         })
