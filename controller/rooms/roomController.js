@@ -17,29 +17,31 @@ export const createRoomController = async (request, response) => {
     const userId = await userModel.findOne({username: roomAdmin}).then((user) => user._id);
     const room  =  await roomModel.findOne({roomName: roomName})
 
-    console.log(room);
-    if(room) {
-        console.log("this room already exist");
-        return response.status(409).send({
-            message: "room already exist",
-        })
-    } else {
-        const newRoom = new roomModel({
-            roomName: roomName,
-            roomId: roomId,
-            roomAdmin: roomAdmin
-        })
-        newRoom.members.push({username: roomAdmin, userId: userId});
-        newRoom.save()
-            response.status(201).send({
-              message: "room has been created",
-              room_name: roomName,
-              room_id: roomId,
-              roomAdmin: roomAdmin,
-            });
+
+    response.send("heyy")
+    // console.log(room);
+    // if(room) {
+    //     console.log("this room already exist");
+    //     return response.status(409).send({
+    //         message: "room already exist",
+    //     })
+    // } else {
+    //     const newRoom = new roomModel({
+    //         roomName: roomName,
+    //         roomId: roomId,
+    //         roomAdmin: roomAdmin
+    //     })
+    //     newRoom.members.push({username: roomAdmin, userId: userId});
+    //     newRoom.save()
+    //         response.status(201).send({
+    //           message: "room has been created",
+    //           room_name: roomName,
+    //           room_id: roomId,
+    //           roomAdmin: roomAdmin,
+    //         });
         
-    }
-    roomCount++;
+    // }
+    // roomCount++;
 }
 
 // *********** Search room controller ***********
