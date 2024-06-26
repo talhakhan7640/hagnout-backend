@@ -11,22 +11,22 @@ import messageRouter from "./routes/messages/messages.js";
 
 import { app } from "./server.js";
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type ,Accept");
-    next();
-})
 
 const corsOptions = {
-     origin: 'http://localhost:3000', // allow only this origin
+    origin: 'http://localhost:3000', // allow only this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: ['Content-Type'],
 }
-
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//     res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type ,Accept");
+//     next();
+// })
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -35,8 +35,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use('/users', userRouter);
 app.use('/rooms', roomRouter);
 app.use('/messages', messageRouter);
-
-
 
 try { 
     mongoose.connect(process.env.URI)
