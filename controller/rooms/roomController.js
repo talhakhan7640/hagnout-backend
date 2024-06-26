@@ -34,10 +34,7 @@ export const createRoomController = async (request, response) => {
             console.log(result)
             response.status(201).send({
                 message: "room has been created",
-                room_name: roomName,
-                room_id: roomId,
-                roomAdmin: roomAdmin,
-            })
+        })
         })
     }
     roomCount++;
