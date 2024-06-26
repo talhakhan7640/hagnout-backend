@@ -14,8 +14,8 @@ export const createRoomController = async (request, response) => {
     const roomId = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') + roomCount;
     const roomAdmin = request.body.Admin;
 
-    const userId = await userModel.findOne({username: roomAdmin}).then((user) => user._id);
-    const room  =  await roomModel.findOne({roomName: roomName})
+    // const userId = await userModel.findOne({username: roomAdmin}).then((user) => user._id);
+    // const room  =  await roomModel.findOne({roomName: roomName})
 
 
     response.send("heyy")
