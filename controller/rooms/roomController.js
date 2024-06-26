@@ -30,12 +30,14 @@ export const createRoomController = async (request, response) => {
             roomAdmin: roomAdmin
         })
         newRoom.members.push({username: roomAdmin, userId: userId});
-        newRoom.save().then((result) => {
-            console.log(result)
+        newRoom.save()
             response.status(201).send({
-                message: "room has been created",
-        })
-        })
+              message: "room has been created",
+              room_name: roomName,
+              room_id: roomId,
+              roomAdmin: roomAdmin,
+            });
+        
     }
     roomCount++;
 }
