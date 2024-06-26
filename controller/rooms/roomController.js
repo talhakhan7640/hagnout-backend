@@ -14,34 +14,36 @@ export const createRoomController = async (request, response) => {
     const roomId = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') + roomCount;
     const roomAdmin = request.body.Admin;
 
-    const userId = await userModel.findOne({username: roomAdmin}).then((user) => user._id);
-    const room  =  await roomModel.findOne({roomName: roomName})
+    response.send("Hey i got a request for creating a room")
 
-    console.log(room);
-    if(room) {
-        console.log("this room already exist");
-        return response.status(409).send({
-            message: "room already exist",
-        })
-    } else {
-        const newRoom = new roomModel({
-            roomName: roomName,
-            roomId: roomId,
-            roomAdmin: roomAdmin
-        })
-        newRoom.members.push({username: roomAdmin, userId: userId});
-        newRoom.save().then((result) => {
-            console.log(result)
-            response.status(201).send({
-                message: "room has been created",
-                room_name: roomName,
-                room_id: roomId,
-                roomAdmin: roomAdmin,
-                id: newRoom._id,
-            })
-        })
-    }
-    roomCount++;
+    // const userId = await userModel.findOne({username: roomAdmin}).then((user) => user._id);
+    // const room  =  await roomModel.findOne({roomName: roomName})
+
+    // console.log(room);
+    // if(room) {
+    //     console.log("this room already exist");
+    //     return response.status(409).send({
+    //         message: "room already exist",
+    //     })
+    // } else {
+    //     const newRoom = new roomModel({
+    //         roomName: roomName,
+    //         roomId: roomId,
+    //         roomAdmin: roomAdmin
+    //     })
+    //     newRoom.members.push({username: roomAdmin, userId: userId});
+    //     newRoom.save().then((result) => {
+    //         console.log(result)
+    //         response.status(201).send({
+    //             message: "room has been created",
+    //             room_name: roomName,
+    //             room_id: roomId,
+    //             roomAdmin: roomAdmin,
+    //             id: newRoom._id,
+    //         })
+    //     })
+    // }
+    // roomCount++;
 }
 
 // *********** Search room controller ***********
