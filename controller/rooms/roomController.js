@@ -37,7 +37,6 @@ export const createRoomController = async (request, response) => {
                 room_name: roomName,
                 room_id: roomId,
                 roomAdmin: roomAdmin,
-                id: newRoom._id,
             })
         })
     }
