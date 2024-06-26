@@ -33,7 +33,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // use routes
 app.use('/users', userRouter);
-app.use('/rooms', roomRouter);
+// app.use('/rooms', roomRouter);
+app.use('/room', roomRouter)
 app.use('/messages', messageRouter);
 
 try { 
