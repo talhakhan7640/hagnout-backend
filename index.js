@@ -18,6 +18,7 @@ const corsOptions = {
     credentials: true,
     allowedHeaders: ['Content-Type'],
 }
+
 // Cors options.
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
