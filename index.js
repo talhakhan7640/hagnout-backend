@@ -18,14 +18,15 @@ const corsOptions = {
     credentials: true,
     allowedHeaders: ['Content-Type'],
 }
+// Cors options.
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//     res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type ,Accept");
-//     next();
-// })
+ app.use(function(req, res, next) {
+     res.header("Access-Control-Allow-Origin", "*");
+     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+     res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type ,Accept");
+     next();
+ })
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -33,8 +34,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // use routes
 app.use('/users', userRouter);
-// app.use('/rooms', roomRouter);
-app.use('/room', roomRouter)
+app.use('/rooms', roomRouter);
+//app.use('/room', roomRouter)
 app.use('/messages', messageRouter);
 
 try { 
