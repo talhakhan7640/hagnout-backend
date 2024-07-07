@@ -11,12 +11,14 @@ const server = http.createServer(app);
 // create an io instance 
 const io = new Server(server, {
 	cors: {
-		origin: "*:*",
+		origin: "*",
 		 allowedHeaders: ["my-custom-header"],
 		 methods: ["GET", "POST"],
 
 	}
 });
+
+// io.origins('*:*') 
 
 io.on('connection', (socket) => {
 	console.log(`a user connected`, socket.id);

@@ -14,7 +14,7 @@ import messageRouter from "./routes/messages/messages.js";
 
 // settings cors options 
 const corsOptions = {
-    origin: 'http://localhost:3000', // allow only this origin
+    origin: '*', // allow only this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: ['Content-Type'],
