@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose  from "mongoose";
 import { messageSchema } from "../messages/messages.js";
 
 const membersSchema = new mongoose.Schema({
