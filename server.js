@@ -1,16 +1,29 @@
 import express from 'express';
-import dotenv from "dotenv";
+import http from "node:http";
 import { Server } from 'socket.io';
-import { createServer } from 'node:http';
 
-dotenv.config();
+// create app instance 
 const app = express();
 
-const server = createServer(app);
+// create a server instance 
+const server = http.createServer(app);
+
+// create an io instance 
 const io = new Server(server, {
-  cors: {
-    origin:"http://localhost:3000"
-  }
+	cors: {
+		origin: "http://localhost:3000"
+	}
 });
 
-export {app, server ,io};
+io.on('connection', (socket) => {
+	console.log(`a user connected`, socket.id);
+	socket.on('msg', (msgC) => {
+		console.log(msgC);
+		io.emit('msg', msgC);
+	})
+	socket.on('disconnect', () => {
+		console.log('user disconnected');
+	});
+})
+
+export {app, server, io};

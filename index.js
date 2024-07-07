@@ -1,17 +1,18 @@
 import mongoose from "mongoose";
-import {server} from './server.js';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import express from 'express'
+import dotenv from "dotenv";
+import { app, server, io } from "./server.js";
+
+dotenv.config();
 
 // getting routes
 import userRouter from './routes/users/userRoutes.js';
 import roomRouter from './routes/rooms/roomRoute.js';
 import messageRouter from "./routes/messages/messages.js";
 
-import { app } from "./server.js";
-
-
+// settings cors options 
 const corsOptions = {
     origin: 'http://localhost:3000', // allow only this origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -19,7 +20,6 @@ const corsOptions = {
     allowedHeaders: ['Content-Type'],
 }
 
-// Cors options.
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
  app.use(function(req, res, next) {
@@ -29,6 +29,7 @@ app.options('*', cors(corsOptions));
      next();
  })
 
+// settings up middlewares
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -36,7 +37,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 // use routes
 app.use('/users', userRouter);
 app.use('/rooms', roomRouter);
-//app.use('/room', roomRouter)
 app.use('/messages', messageRouter);
 
 try { 
