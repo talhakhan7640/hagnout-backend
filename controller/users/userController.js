@@ -7,7 +7,7 @@ export const userSignupController =  async (request, response, next) => {
     const username = request.body.username;
     const userEmail = request.body.email;
     const userPassword = request.body.password;
-	const profile = 'https://api.dicebear.com/9.x/adventurer/svg?scale=50';
+	const profile = 'https://api.dicebear.com/9.x/adventurer/svg?scale=200';
 
 
     const document = await userModel.findOne({ username: username });
