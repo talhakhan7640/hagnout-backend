@@ -7,6 +7,8 @@ export const userSignupController =  async (request, response, next) => {
     const username = request.body.username;
     const userEmail = request.body.email;
     const userPassword = request.body.password;
+	const profile = 'https://api.dicebear.com/9.x/adventurer/svg';
+
 
     const document = await userModel.findOne({ username: username });
     if (document) {
@@ -33,6 +35,7 @@ export const userSignupController =  async (request, response, next) => {
                         username: username,
                         email: userEmail,
                         password: hashedPassword,
+						profilePic: profile
                     });
                     user.save()
                         .then((result) => {
@@ -89,7 +92,8 @@ export const userLoginController = async (request, response) => {
           response.status(200).send({
             message: "Login successful",
             email: user.email,
-            userIid: user._id,
+            userid: user._id,
+			profilePic : user.profilePic,
             token,
           });
         })
