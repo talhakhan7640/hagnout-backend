@@ -21,6 +21,7 @@ export const sendMessage = async (req, res) => {
   const { senderId } = req.body;
   const { roomId } = req.body;
 
+  console.log(" coming from sernder you just set", senderId)
 	// Handle real time messaging 
 
   const room = await roomModel.findById(roomId);
