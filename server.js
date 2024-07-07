@@ -11,7 +11,10 @@ const server = http.createServer(app);
 // create an io instance 
 const io = new Server(server, {
 	cors: {
-		origin: "http://localhost:3000"
+		origin: "*:*",
+		 allowedHeaders: ["my-custom-header"],
+		 methods: ["GET", "POST"],
+
 	}
 });
 
