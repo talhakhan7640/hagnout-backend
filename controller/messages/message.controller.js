@@ -1,5 +1,6 @@
 // import messageModel from "../../models/messages/messages.js";
 import roomModel from "../../models/rooms/roomModel.js";
+import { server, io } from "../../server.js";
 
 export const getMessages = async (req, res) => {
   const id = req.params.id;
@@ -20,10 +21,9 @@ export const sendMessage = async (req, res) => {
   const { senderId } = req.body;
   const { roomId } = req.body;
 
-  // const room = await roomModel.findOne({roomId: roomId});
+	// Handle real time messaging 
 
   const room = await roomModel.findById(roomId);
-  // console.log(senderId)
   room.conversations.push({ messageContent, senderId, roomId });
 
   room.save();
