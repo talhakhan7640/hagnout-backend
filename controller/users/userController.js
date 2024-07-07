@@ -2,12 +2,41 @@ import userModel from "../../models/users/userModel.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 
+const avatarName = [
+	'Salem',
+	'Molly',
+	'Spooky',
+	'Gizmo',
+	'Annie',
+	'Lucy',
+	'Kiki',
+	'Chloe',
+	'Harley',
+	'Coco',
+	'George',
+	'Pepper',
+	'Maggie',
+	'Dusty',
+	'Sheba',
+	'Lily',
+	'Gracie',
+	'Smokey',
+	'Mimi'
+]
+
+const avatarStyle = [
+	'adventurer',
+	'adventurer-neutral',
+	'avataaars-neutral',
+]
+
+
 export const userSignupController =  async (request, response, next) => {
     const saltRounds = 10;
     const username = request.body.username;
     const userEmail = request.body.email;
     const userPassword = request.body.password;
-	const profile = 'https://api.dicebear.com/9.x/adventurer/svg?scale=200';
+	const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?scale=200?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}`;
 
 
     const document = await userModel.findOne({ username: username });
