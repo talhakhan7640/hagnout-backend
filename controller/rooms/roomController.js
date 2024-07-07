@@ -38,8 +38,9 @@ export const createRoomController = async (request, response) => {
         newRoom.save().then(() => {
             response.status(201).send({
              message: "room has been created",
+				id: _id,
              room_name: roomName,
-              room_id: roomId,
+				room_id: roomId,
              roomAdmin: roomAdmin,
             });
         })
@@ -74,7 +75,6 @@ export const joinRoomController = async (request, response) => {
     const {userId} = request.body;
 
     const room = await roomModel.findOne({'roomId': roomId});
-    const id = await userModel.findOne({'username' : username})
 
     const user = room.members.find((u) => u.username === username);
     if(user === undefined){
@@ -88,7 +88,6 @@ export const joinRoomController = async (request, response) => {
             message: "You are already a member of this room"
         })
     }
-
 }
 
 // *********** Delete room controller ***********
