@@ -91,8 +91,7 @@ export const userSignupController =  async (request, response, next) => {
 }
 
 export const userLoginController = async (request, response) => {
-   const username = request.body.username;
-  const email = request.body.email;
+  const username = request.body.username;
   const password = request.body.password;
 
   userModel
@@ -102,7 +101,7 @@ export const userLoginController = async (request, response) => {
         .compare(password, user.password)
         .then((passwordCheck) => {
           if (!passwordCheck) {
-            console.log("wrong password")
+            console.log("wrong password");
             return response.status(400).send({
               message: "Wrong password",
             });
@@ -115,20 +114,18 @@ export const userLoginController = async (request, response) => {
             "RANDOM-TOKEN",
             { expiresIn: "24h" }
           );
-          
-          console.log("login successfull")
+
+          console.log("login successfull");
           response.status(200).send({
             message: "Login successful",
-            email: user.email,
-            userid: user._id,
-			profilePic : user.profilePic,
+            userId: user._id,
+            profilePic: user.profilePic,
             token,
           });
         })
         .catch((error) => {
-             console.log("wrong password")
+          console.log("wrong password");
           response.status(400).send({
-            
             message: "Wrong password!!",
             error,
           });

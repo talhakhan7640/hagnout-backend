@@ -13,13 +13,11 @@ function randomString(length, chars) {
 export const createRoomController = async (request, response) => {
     const roomName = request.body.roomName;
     const roomId = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') + roomCount;
-    const roomAdmin = request.body.Admin;
+    const roomAdmin = request.body.roomAdmin;
     console.log(`room admin`, roomAdmin);
 
 
     const userId = await userModel.findOne({username: roomAdmin});
-    console.log(userId._id);
-
     const room  =  await roomModel.findOne({roomName: roomName})
 
     console.log(room);
@@ -36,14 +34,14 @@ export const createRoomController = async (request, response) => {
         })
         newRoom.members.push({username: roomAdmin, userId: userId._id});
         newRoom.save().then(() => {
-            response.status(201).send({
-             message: "room has been created",
-				id: _id,
-             room_name: roomName,
-				room_id: roomId,
-             roomAdmin: roomAdmin,
-            });
-        })
+          response.status(201).send({
+            message: "room has been created",
+            id: _id,
+            room_name: roomName,
+            room_id: roomId,
+            roomAdmin: roomAdmin,
+          });
+        });
        
     }
     roomCount++;
