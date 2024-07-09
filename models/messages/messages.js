@@ -4,8 +4,11 @@ export const messageSchema = new mongoose.Schema(
   {
     messageContent: {
       type: String,
-      required: true,
     },
+
+	  file: {
+		type: String,
+	},
 
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
