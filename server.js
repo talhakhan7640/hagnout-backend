@@ -1,6 +1,7 @@
 import express from 'express';
 import http from "node:http";
 import { Server } from 'socket.io';
+import { realTimeMessaging } from './socket/messages.socket.js';
 
 // create app instance 
 const app = express();
@@ -18,13 +19,12 @@ const io = new Server(server, {
 	}
 });
 
-// io.origins('*:*') 
-
 io.on('connection', (socket) => {
 	console.log(`a user connected`, socket.id);
 	socket.on('msg', (msgC) => {
-		console.log(msgC);
-		io.emit('msg', msgC);
+		realTimeMessaging(msgC)	
+		// console.log(msgC);
+	// 	io.emit('msg', msgC);
 	})
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
