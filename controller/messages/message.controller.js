@@ -1,31 +1,63 @@
 // import messageModel from "../../models/messages/messages.js";
 import roomModel from "../../models/rooms/roomModel.js";
-import { server, io } from "../../server.js";
+import userModel from "../../models/users/userModel.js";
 
 export const getMessages = async (req, res) => {
   const id = req.params.id;
 
-  console.log(id);
-  // const room = await roomModel.findOne({roomId: id});
-  const room = await roomModel.findById(id);
+  try {
+    console.log(id);
+    const room = await roomModel.findById(id);
 
-  if (room.conversations) {
-    return res.send(room.conversations);
+    if (!room) {
+      return res.status(404).send({ message: "Room not found" });
+    }
+
+    if (room.conversations) {
+      const conversations = [];
+
+      for (const c of room.conversations) {
+        const user = await userModel.findById(c.senderId.toString());
+        if (user) {
+          conversations.push({
+			file: c.file,
+            messageContent: c.messageContent,
+            username: user.username,
+            profile: user.profilePic
+          });
+        }
+      }
+
+      return res.send(conversations);
+    } else {
+      return res.send([]);
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Internal server error" });
   }
-
-  res.send([]);
 };
 
 export const sendMessage = async (req, res) => {
   const messageContent = req.body.messageContent;
   const { senderId } = req.body;
   const { roomId } = req.body;
+	const {file} = req.body;
 
-	// Handle real time messaging 
+ try {
+    const room = await roomModel.findById(roomId);
 
-  const room = await roomModel.findById(roomId);
-  room.conversations.push({ messageContent, senderId, roomId });
+    if (!room) {
+      return res.status(404).send({ message: "Room not found" });
+    }
 
-  room.save();
-  res.status(201).send({ message: "message sent" });
+    room.conversations.push({ messageContent, file,  senderId, roomId });
+
+    await room.save();
+
+    res.status(201).send({ message: "Message sent" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal server error" });
+  } 
 };
