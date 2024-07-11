@@ -6,10 +6,6 @@ export const messageSchema = new mongoose.Schema(
       type: String,
     },
 
-	  file: {
-		type: String,
-	},
-
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
