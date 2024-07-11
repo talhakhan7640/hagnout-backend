@@ -49,7 +49,7 @@ export const sendMessage = async (req, res) => {
 			return res.status(404).send({ message: "Room not found" });
 		}
 
-		room.conversations.push({ messageContent,  senderId, roomId });
+		room.conversations.push({ messageContent, senderId, roomId });
 
 		await room.save();
 
