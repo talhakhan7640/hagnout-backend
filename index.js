@@ -21,13 +21,6 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
- app.use(function(req, res, next) {
-     res.header("Access-Control-Allow-Origin", "*");
-     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-     res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type ,Accept");
-     next();
- })
 
 // settings up middlewares
 app.use(express.json());
@@ -40,7 +33,7 @@ app.use('/rooms', roomRouter);
 app.use('/messages', messageRouter);
 
 try { 
-    mongoose.connect(process.env.URI)
+    mongoose.connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         server.listen(5000, () => {
             console.log(`server started`)
