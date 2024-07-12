@@ -5,38 +5,36 @@ import userModel from "../../models/users/userModel.js";
 export const getMessages = async (req, res) => {
 	const id = req.params.id;
 
-	res.send("heyy just testing on live endpoint");
+	try {
+		console.log("coming from backend", id);
+		const room = await roomModel.findById(id);
 
-	// try {
-	// 	console.log("coming from backend", id);
-	// 	const room = await roomModel.findById(id);
+		if (!room) {
+			return res.status(404).send({ message: "Room not found" });
+		}
 
-	// 	if (!room) {
-	// 		return res.status(404).send({ message: "Room not found" });
-	// 	}
+		if (room.conversations) {
+			const conversations = [];
 
-	// 	if (room.conversations) {
-	// 		const conversations = [];
+			for (const c of room.conversations) {
+				const user = await userModel.findById(c.senderId.toString());
+				if (user) {
+					conversations.push({
+						messageContent: c.messageContent,
+						username: user.username,
+						profile: user.profilePic
+					});
+				}
+			}
 
-	// 		for (const c of room.conversations) {
-	// 			const user = await userModel.findById(c.senderId.toString());
-	// 			if (user) {
-	// 				conversations.push({
-	// 					messageContent: c.messageContent,
-	// 					username: user.username,
-	// 					profile: user.profilePic
-	// 				});
-	// 			}
-	// 		}
-
-	// 		return res.send(conversations);
-	// 	} else {
-	// 		return res.send([]);
-	// 	}
-	// } catch (error) {
-	// 	console.error(error);
-	// 	return res.status(500).send({ message: "Internal server error" });
-	// }
+			return res.send(conversations);
+		} else {
+			return res.send([]);
+		}
+	} catch (error) {
+		console.error(error);
+		return res.status(500).send({ message: "Internal server error" });
+	}
 };
 
 export const sendMessage = async (req, res) => {
