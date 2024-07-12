@@ -14,7 +14,7 @@ export const getMessages = async (req, res) => {
 		}
 
 		if (room.conversations) {
-			const conversations = [];
+			var conversations = [];
 
 			for (const c of room.conversations) {
 				const user = await userModel.findById(c.senderId.toString());
@@ -22,12 +22,10 @@ export const getMessages = async (req, res) => {
 					conversations.push({
 						messageContent: c.messageContent,
 						username: user.username,
-						profile: user.profilePic
+						profilePic: user.profilePic
 					});
 				}
 			}
-
-			console.log(conversations);
 
 			return res.send(conversations);
 		} else {
