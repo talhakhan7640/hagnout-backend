@@ -33,7 +33,7 @@ app.use('/rooms', roomRouter);
 app.use('/messages', messageRouter);
 
 try { 
-    mongoose.connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect(process.env.URI)
     .then(() => {
         server.listen(5000, () => {
             console.log(`server started`)
