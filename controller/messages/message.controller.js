@@ -27,6 +27,8 @@ export const getMessages = async (req, res) => {
 				}
 			}
 
+			console.log(conversations);
+
 			return res.send(conversations);
 		} else {
 			return res.send([]);
