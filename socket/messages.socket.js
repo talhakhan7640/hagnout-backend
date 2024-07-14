@@ -2,7 +2,7 @@ import userModel from "../models/users/userModel.js";
 import { io } from "../server.js";
 import moment from 'moment';
 
-let currentTime = moment().format('MMMM Do YYYY, h:mm:ss a');
+let currentTime = moment().toISOString();
 
 export const realTimeMessaging = async (msgC) => {
    const {messageContent, username, fileUrl} = msgC;
