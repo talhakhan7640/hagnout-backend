@@ -22,6 +22,7 @@ export const getMessages = async (req, res) => {
 					conversations.push({
 						messageContent: c.messageContent,
 						fileUrl: c.fileUrl,
+						timestamp: c.createdAt,
 						username: user.username,
 						profilePic: user.profilePic
 					});
