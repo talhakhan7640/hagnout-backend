@@ -28,6 +28,8 @@ const avatarStyle = [
 	'adventurer',
 	'adventurer-neutral',
 	'avataaars-neutral',
+  'croodles',
+  'lorelei'
 ]
 
 
@@ -36,7 +38,7 @@ export const userSignupController =  async (request, response, next) => {
     const username = request.body.username;
     const userEmail = request.body.email;
     const userPassword = request.body.password;
-	const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}?scale=200`;
+	  const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}?scale=200`;
 
     const document = await userModel.findOne({ username: username });
     if (document) {
