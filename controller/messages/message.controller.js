@@ -21,6 +21,7 @@ export const getMessages = async (req, res) => {
 				if (user) {
 					conversations.push({
 						messageContent: c.messageContent,
+						fileUrl: c.fileUrl,
 						username: user.username,
 						profilePic: user.profilePic
 					});
@@ -41,6 +42,7 @@ export const sendMessage = async (req, res) => {
 	const messageContent = req.body.messageContent;
 	const { senderId } = req.body;
 	const { roomId } = req.body;
+	const {fileUrl} = req.body;
 
 	try {
 		const room = await roomModel.findById(roomId);
@@ -49,7 +51,7 @@ export const sendMessage = async (req, res) => {
 			return res.status(404).send({ message: "Room not found" });
 		}
 
-		room.conversations.push({ messageContent, senderId, roomId });
+		room.conversations.push({ messageContent, fileUrl, senderId, roomId });
 
 		await room.save();
 
