@@ -2,6 +2,8 @@ import userModel from "../models/users/userModel.js";
 import { io } from "../server.js";
 import moment from 'moment';
 
+let currentTime = moment().format('MMMM Do YYYY, h:mm:ss a');
+
 export const realTimeMessaging = async (msgC) => {
    const {messageContent, username, fileUrl} = msgC;
    const user = await userModel.findOne({username: username});
@@ -12,7 +14,7 @@ export const realTimeMessaging = async (msgC) => {
        fileUrl: fileUrl,
        username: user.username,
        profilePic: user.profilePic,
-       timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
+       timestamp: currentTime,
      },
    );
 }
