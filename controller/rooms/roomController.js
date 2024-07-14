@@ -104,7 +104,8 @@ export const leaveRoomController = async (request, response) => {
     const username = request.body.username;
     const roomId = request.body.roomId;
 
-    const room = await roomModel.findOne({'roomId': roomId});
+    // const room = await roomModel.findOne({'roomId': roomId});
+    const room = await roomModel.findById(roomId)
     // room.members.pop({username: username});
     room.members.remove({username: username});
     room.save().then(() => {
