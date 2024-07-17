@@ -141,3 +141,7 @@ export const userLoginController = async (request, response) => {
       });
     });
 };
+
+export const userLogoutController = (req, res) => {
+   res.send({token: ""});
+}
