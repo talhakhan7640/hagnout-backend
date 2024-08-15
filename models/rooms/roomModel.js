@@ -10,6 +10,13 @@ const membersSchema = new mongoose.Schema({
   },
 });
 
+const musicSchema = new mongoose.Schema({
+	trackName : String,
+	trackUrl: {
+		type: String
+	}
+})
+
 const roomSchema = new mongoose.Schema({
     roomName: {
         type: String,
@@ -26,7 +33,8 @@ const roomSchema = new mongoose.Schema({
     roomAdmin: {
         type: String,
         require: true,
-    }
+    },
+	tracks: [musicSchema]
 })
 
 const roomModel = mongoose.model('Room', roomSchema);
