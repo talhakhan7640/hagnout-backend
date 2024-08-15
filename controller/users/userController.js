@@ -32,7 +32,6 @@ const avatarStyle = [
   'lorelei'
 ]
 
-
 export const userSignupController =  async (request, response, next) => {
     const saltRounds = 10;
     const username = request.body.username;

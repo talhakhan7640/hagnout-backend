@@ -43,7 +43,7 @@ export const sendMessage = async (req, res) => {
 	const messageContent = req.body.messageContent;
 	const { senderId } = req.body;
 	const { roomId } = req.body;
-	const {fileUrl} = req.body;
+	const { fileUrl } = req.body;
 
 	try {
 		const room = await roomModel.findById(roomId);
