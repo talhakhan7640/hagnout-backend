@@ -125,8 +125,29 @@ export const fetchRoomsController = async (request, response) => {
 
   response.send(joinedRooms);
 };
+
+// *********** Fetch trakcs ************
+export const fetchTracksController = async (request, response) => {
+  const {roomId} = request.params;
+
+  try {
+    const room = await roomModel.findById(roomId);
+
+    if(room.tracks) {
+      var tracks = [];
+
+      for(const t of room.tracks){
+        tracks.push({ trackUrl : t.trackUrl, trackName: t.trackName})
+      }
+    }
+    return response.send(tracks);
+  } catch(error) {
+     return response.status(500).send({message: "Internal srever error"});
+  }
+}
+
 // *********** Music controller ***********
-export const addMusicToRoomPlayer = async (request, response) => {
+export const addMusicToRoomPlayerController = async (request, response) => {
 	const roomId = request.body.roomId;
 
 	const {trackName} = request.body;
