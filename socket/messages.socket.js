@@ -1,6 +1,5 @@
 import userModel from "../models/users/userModel.js";
 import { io } from "../server.js";
-import moment from 'moment';
 
 var currentdate = new Date(); 
 var datetime = "Last Sync: " + currentdate.getDate() + "/"
@@ -23,4 +22,10 @@ export const realTimeMessaging = async (msgC) => {
        timestamp: datetime,
      },
    );
+}
+
+export const realTimeTrackBroadcast = async (trackDetails) => {
+  const {trackName, trackUrl} = trackDetails;
+  io.emit('trackDetails', { trackName, trackUrl }); // Broadcast to all clients
+  // console.log("requested track details: ", trackName, trackUrl);
 }
