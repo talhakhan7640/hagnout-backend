@@ -1,7 +1,7 @@
 import express from 'express';
 import http from "node:http";
 import { Server } from 'socket.io';
-import { realTimeMessaging } from './socket/messages.socket.js';
+import { realTimeMessaging, realTimeTrackBroadcast } from './socket/messages.socket.js';
 
 // create app instance 
 const app = express();
@@ -22,7 +22,11 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
 	console.log(`a user connected`, socket.id);
 	socket.on('msg', (msgC) => {
-		realTimeMessaging(msgC)	
+		if(msgC.trackUrl && msgC.trackName) {
+			realTimeTrackBroadcast({trackName: msgC.trackName, trackUrl: msgC.trackUrl});
+		} else {
+			realTimeMessaging(msgC)	
+		}
 		// console.log(msgC);
 	// 	io.emit('msg', msgC);
 	})
