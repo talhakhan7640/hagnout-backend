@@ -1,6 +1,7 @@
 import roomModel from "../../models/rooms/roomModel.js";
 import userModel from "../../models/users/userModel.js";
 
+
 var roomCount = 1;
 // *********** Create room controller ***********
 function randomString(length, chars) {
@@ -160,3 +161,21 @@ export const addMusicToRoomPlayerController = async (request, response) => {
 		message: "Track has been added"
 	})
 };
+
+export const fetchRoomMembers = async (request, response) => {
+  const  roomId  = request.body.roomid;
+  try {
+    const room = await roomModel.findById(roomId); 
+    const membersInfo = [];
+    
+    for (const member of room.members) {
+      const user = await userModel.find({username: member.username})
+      membersInfo.push({ username: user[0].username, profilePic: user[0].profilePic });
+    }
+
+    return response.send(membersInfo); // Corrected 'resopnse' to 'response'
+  } catch (e) {
+    response.send({ "Something went wrong": e });
+  }
+};
+

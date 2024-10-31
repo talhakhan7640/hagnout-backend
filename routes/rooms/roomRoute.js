@@ -1,5 +1,5 @@
 import express from 'express';
-import { createRoomController, searchRoomsController, joinRoomController, deleteRoomController, leaveRoomController, fetchRoomsController, addMusicToRoomPlayerController, fetchTracksController} from '../../controller/rooms/roomController.js';
+import { createRoomController, searchRoomsController, joinRoomController, deleteRoomController, leaveRoomController, fetchRoomsController, addMusicToRoomPlayerController, fetchTracksController, fetchRoomMembers} from '../../controller/rooms/roomController.js';
 
 const roomRouter = express.Router();
 
@@ -11,5 +11,6 @@ roomRouter.put('/leave-room', leaveRoomController);
 roomRouter.post('/fetch-rooms', fetchRoomsController);
 roomRouter.post('/add-track', addMusicToRoomPlayerController);
 roomRouter.get('/fetch-tracks/:roomId', fetchTracksController);
+roomRouter.post('/fetch-members', fetchRoomMembers);
 
 export default roomRouter;

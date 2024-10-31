@@ -32,12 +32,23 @@ const avatarStyle = [
   'lorelei'
 ]
 
+const getProfileGif = async () => {
+    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=anime&rating=pg`);
+    const data = await response.json();
+    return data;
+}
+
 export const userSignupController =  async (request, response, next) => {
     const saltRounds = 10;
     const username = request.body.username;
     const userEmail = request.body.email;
     const userPassword = request.body.password;
-	  const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}?scale=200`;
+	  //const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}?scale=200`;
+    const profile = await getProfileGif().then((gifData)=> {
+         return gifData.data.embed_url;
+    })
+
+    console.log("profile ", profile);
 
     const document = await userModel.findOne({ username: username });
     if (document) {

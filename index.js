@@ -5,6 +5,7 @@ import express from 'express'
 import dotenv from "dotenv";
 import { app, server, io } from "./server.js";
 
+
 dotenv.config();
 
 // getting routes
