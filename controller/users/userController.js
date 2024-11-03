@@ -43,12 +43,7 @@ export const userSignupController =  async (request, response, next) => {
     const username = request.body.username;
     const userEmail = request.body.email;
     const userPassword = request.body.password;
-	  //const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}?scale=200`;
-    const profile = await getProfileGif().then((gifData)=> {
-         return gifData.data.embed_url;
-    })
-
-    console.log("profile ", profile);
+    const profile = `https://api.dicebear.com/9.x/${avatarStyle[Math.floor(Math.random() * avatarStyle.length)]}/svg?seed=${avatarName[Math.floor(Math.random() * avatarName.length)]}?scale=200`;
 
     const document = await userModel.findOne({ username: username });
     if (document) {
@@ -75,7 +70,7 @@ export const userSignupController =  async (request, response, next) => {
                         username: username,
                         email: userEmail,
                         password: hashedPassword,
-						profilePic: profile
+                        profilePic: profile
                     });
                     user.save()
                         .then((result) => {
