@@ -1,10 +1,11 @@
+// importing required modules
 import mongoose from "mongoose";
 import bodyParser from 'body-parser';
 import cors from "cors";
 import express from 'express'
 import dotenv from "dotenv";
-import { app, server, io } from "./server.js";
-
+import { app, server } from "./server.js";
+import authenticateToken from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -21,8 +22,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type'],
 }
 
-
-// settings up middlewares
+// setting up middlewares
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -32,20 +32,18 @@ app.options('*', cors());
 
 // use routes
 app.use('/users', userRouter);
-app.use('/rooms', roomRouter);
-app.use('/messages', messageRouter);
+app.use('/rooms', authenticateToken, roomRouter);
+app.use('/messages', authenticateToken, messageRouter);
 
 try { 
     mongoose.connect(process.env.URI)
     .then(() => {
         server.listen(5000, () => {
-            console.log(`server started`)
+            console.log(`server started`);
         })
     }).catch((error) => {
-        console.log("server could not be started")
+        console.log("server could not be started", error);
     })
 } catch (error) {
     console.log(error);
 }
-
-// dev-akh0lkiqzxbgygks

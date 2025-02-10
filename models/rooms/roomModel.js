@@ -2,19 +2,19 @@ import mongoose  from "mongoose";
 import { messageSchema } from "../messages/messages.js";
 
 const membersSchema = new mongoose.Schema({
-  username: String,
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
+    username: String,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 
 const musicSchema = new mongoose.Schema({
-	trackName : String,
-	trackUrl: {
-		type: String
-	}
+    trackName : String,
+    trackUrl: {
+        type: String
+    }
 })
 
 const roomSchema = new mongoose.Schema({
@@ -28,13 +28,16 @@ const roomSchema = new mongoose.Schema({
         require: true,
         unique: true,
     },
+    roomCover: {
+        type: String,
+    },
     conversations: [messageSchema],
     members: [membersSchema],
     roomAdmin: {
         type: String,
         require: true,
     },
-	tracks: [musicSchema]
+    tracks: [musicSchema]
 })
 
 const roomModel = mongoose.model('Room', roomSchema);

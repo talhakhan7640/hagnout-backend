@@ -1,7 +1,6 @@
 import roomModel from "../../models/rooms/roomModel.js";
 import userModel from "../../models/users/userModel.js";
 
-
 var roomCount = 1;
 // *********** Create room controller ***********
 function randomString(length, chars) {
@@ -11,6 +10,7 @@ function randomString(length, chars) {
   return result;
 }
 
+// ****************** Ceate Room Controller ******************
 export const createRoomController = async (request, response) => {
   const roomName = request.body.roomName;
   const roomId =
@@ -19,12 +19,14 @@ export const createRoomController = async (request, response) => {
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     ) + roomCount;
   const roomAdmin = request.body.roomAdmin;
-  console.log(`room admin`, roomAdmin);
+
+  // get a random anime cover image if cover is not provided
+
+  const roomCover = request.body.roomCover ? request.body.roomCover : defaultCoverImage;
 
   const userId = await userModel.findOne({ username: roomAdmin });
   const room = await roomModel.findOne({ roomName: roomName });
 
-  console.log(room);
   if (room) {
     console.log("this room already exist");
     return response.status(409).send({
@@ -35,6 +37,7 @@ export const createRoomController = async (request, response) => {
       roomName: roomName,
       roomId: roomId,
       roomAdmin: roomAdmin,
+      roomCover: roomCover,
     });
     newRoom.members.push({ username: roomAdmin, userId: userId._id });
     newRoom.save().then(() => {
@@ -44,6 +47,7 @@ export const createRoomController = async (request, response) => {
         room_name: roomName,
         room_id: roomId,
         roomAdmin: roomAdmin,
+        roomCover: roomCover,
       });
     });
   }
@@ -102,7 +106,6 @@ export const leaveRoomController = async (request, response) => {
   const username = request.body.username;
   const roomId = request.body.roomId;
 
-  // const room = await roomModel.findOne({'roomId': roomId});
   const room = await roomModel.findById(roomId);
   // room.members.pop({username: username});
   room.members.remove({ username: username });
@@ -114,6 +117,7 @@ export const leaveRoomController = async (request, response) => {
 };
 // *********** Fetch room controller ***********
 export const fetchRoomsController = async (request, response) => {
+
   const username = request.body.username;
   var joinedRooms = [];
 

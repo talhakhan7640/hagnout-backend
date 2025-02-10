@@ -3,42 +3,36 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 
 const avatarName = [
-	'Salem',
-	'Molly',
-	'Spooky',
-	'Gizmo',
-	'Annie',
-	'Lucy',
-	'Kiki',
-	'Chloe',
-	'Harley',
-	'Coco',
-	'George',
-	'Pepper',
-	'Maggie',
-	'Dusty',
-	'Sheba',
-	'Lily',
-	'Gracie',
-	'Smokey',
-	'Mimi'
+    'Salem',
+    'Molly',
+    'Spooky',
+    'Gizmo',
+    'Annie',
+    'Lucy',
+    'Kiki',
+    'Chloe',
+    'Harley',
+    'Coco',
+    'George',
+    'Pepper',
+    'Maggie',
+    'Dusty',
+    'Sheba',
+    'Lily',
+    'Gracie',
+    'Smokey',
+    'Mimi'
 ]
 
 const avatarStyle = [
-	'adventurer',
-	'adventurer-neutral',
-	'avataaars-neutral',
-  'croodles',
-  'lorelei'
+    'adventurer',
+    'adventurer-neutral',
+    'avataaars-neutral',
+    'croodles',
+    'lorelei'
 ]
 
-const getProfileGif = async () => {
-    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=anime&rating=pg`);
-    const data = await response.json();
-    return data;
-}
-
-export const userSignupController =  async (request, response, next) => {
+export const userSignupController =  async (request, response) => {
     const saltRounds = 10;
     const username = request.body.username;
     const userEmail = request.body.email;
@@ -89,7 +83,7 @@ export const userSignupController =  async (request, response, next) => {
                 .catch((e) => {
                     response.status(500).send({
                         message:
-                            "Something went wrong! Password could not be hashed successfully!",
+                        "Something went wrong! Password could not be hashed successfully!",
                         e,
                     });
                 });
@@ -98,55 +92,57 @@ export const userSignupController =  async (request, response, next) => {
 }
 
 export const userLoginController = async (request, response) => {
-  const username = request.body.username;
-  const password = request.body.password;
+    const {username} = request.body;
+    const {password} = request.body;
 
-  userModel
-    .findOne({ username: username })
-    .then((user) => {
-      bcrypt
-        .compare(password, user.password)
-        .then((passwordCheck) => {
-          if (!passwordCheck) {
-            console.log("wrong password");
-            return response.status(400).send({
-              message: "Wrong password",
-            });
-          }
-          const token = jwt.sign(
-            {
-              userId: user._id,
-              userEmail: user.email,
-            },
-            "RANDOM-TOKEN",
-            { expiresIn: "24h" }
-          );
-
-          console.log("login successfull");
-          response.status(200).send({
-            message: "Login successful",
-            userId: user._id,
-            profilePic: user.profilePic,
-            token,
-          });
+    userModel
+        .findOne({ username: username })
+        .then((user) => {
+            bcrypt
+                .compare(password, user.password)
+                .then((passwordCheck) => {
+                    if (!passwordCheck) {
+                        console.log("wrong password");
+                        return response.status(400).send({
+                            message: "Wrong password",
+                        });
+                    }
+                    const accessToken = jwt.sign({
+                        userId: user._id,
+                        userEmail: user.email,
+                    },
+                        process.env.ACCESS_TOKEN_SECRET
+                    );
+                    response.cookie('token', accessToken, {
+                        httpOnly: true,
+                        strict: true,
+                        sameSite: 'strict',
+                        maxAge: 24 * 60 * 60 * 1000 // 1 day 
+                    })
+                    response.status(200).send({
+                        message: "Login successful",
+                        userId: user._id,
+                        profilePic: user.profilePic,
+                        accessToken,
+                    });
+                })
+                .catch((error) => {
+                    console.log("wrong password");
+                    response.status(400).send({
+                        message: "Wrong password!!",
+                        error,
+                    });
+                });
         })
         .catch((error) => {
-          console.log("wrong password");
-          response.status(400).send({
-            message: "Wrong password!!",
-            error,
-          });
+            console.log("user not found.")
+            response.status(404).send({
+                message: "User not found!",
+                error,
+            });
         });
-    })
-    .catch((error) => {
-      console.log("user not found.")
-      response.status(404).send({
-        message: "User not found!",
-        error,
-      });
-    });
 };
 
 export const userLogoutController = (req, res) => {
-   res.send({token: ""});
+    res.send({token: ""});
 }
