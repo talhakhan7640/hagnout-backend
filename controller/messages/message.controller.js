@@ -1,12 +1,19 @@
 // import messageModel from "../../models/messages/messages.js";
 import roomModel from "../../models/rooms/roomModel.js";
 import userModel from "../../models/users/userModel.js";
+import redisClient from "../../redis/redis.js";
 
 export const getMessages = async (req, res) => {
 	const id = req.params.id;
 
+	const cachedConversations = await redisClient.get(id);
+
+	if(cachedConversations) {
+		const conversationsArray = JSON.parse(cachedConversations)
+		return res.json({conversationsArray});
+	}
+
 	try {
-		console.log("coming from backend", id);
 		const room = await roomModel.findById(id);
 
 		if (!room) {
@@ -28,6 +35,8 @@ export const getMessages = async (req, res) => {
 					});
 				}
 			}
+
+			await redisClient.set(id, JSON.stringify(conversations));
 
 			return res.send(conversations);
 		} else {
