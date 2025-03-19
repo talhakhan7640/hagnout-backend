@@ -2,6 +2,7 @@ import express from 'express';
 import http from "node:http";
 import { Server } from 'socket.io';
 import { realTimeMessaging, realTimeTrackBroadcast } from './socket/messages.socket.js';
+import publishEvent from './rabbitMQ/publisher.js';
 
 // create app instance 
 const app = express();
@@ -15,21 +16,25 @@ const io = new Server(server, {
 		origin: "*",
 		 allowedHeaders: ["my-custom-header"],
 		 methods: ["GET", "POST"],
-
 	}
 });
 
 io.on('connection', (socket) => {
 	console.log(`a user connected`, socket.id);
 	socket.on('msg', (msgC) => {
-		if(msgC.trackUrl && msgC.trackName) {
-			realTimeTrackBroadcast({trackName: msgC.trackName, trackUrl: msgC.trackUrl});
-		} else {
-			realTimeMessaging(msgC)	
-		}
-		// console.log(msgC);
-	// 	io.emit('msg', msgC);
+		realTimeMessaging(msgC);
 	})
+
+	socket.on('song_change', (data) => {
+		console.log("Song changed", data);
+		publishEvent("song_change", data);
+	})
+
+	socket.on('track-updates', (data) => {
+		console.log(data);
+		socket.emit('live-track-updates', data)	
+	})
+
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
 	});

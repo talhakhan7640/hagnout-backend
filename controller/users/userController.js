@@ -109,21 +109,20 @@ export const userLoginController = async (request, response) => {
                     }
                     const accessToken = jwt.sign({
                         userId: user._id,
-                        userEmail: user.email,
+                        userEmail: user.email
                     },
                         process.env.ACCESS_TOKEN_SECRET
-                    );
+                    )
                     response.cookie('token', accessToken, {
-                        httpOnly: true,
-                        strict: true,
-                        sameSite: 'strict',
+                        httpOnly: false,
+                        strict: false,
+                        sameSite: 'Lax',
                         maxAge: 24 * 60 * 60 * 1000 // 1 day 
                     })
                     response.status(200).send({
                         message: "Login successful",
                         userId: user._id,
                         profilePic: user.profilePic,
-                        accessToken,
                     });
                 })
                 .catch((error) => {

@@ -6,6 +6,7 @@ import express from 'express'
 import dotenv from "dotenv";
 import { app, server } from "./server.js";
 import authenticateToken from "./middleware/auth.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -16,34 +17,36 @@ import messageRouter from "./routes/messages/messages.js";
 
 // settings cors options 
 const corsOptions = {
-    origin: '*', // allow only this origin
+    origin: 'https://hangout-qmom.onrender.com/', // allow only this origin
+    //origin: ['http://localhost:3000', 'http://192.168.0.102:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }
 
 // setting up middlewares
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.use(cors(corsOptions));
 app.options('*', cors());
 
 // use routes
 app.use('/users', userRouter);
-app.use('/rooms', authenticateToken, roomRouter);
-app.use('/messages', authenticateToken, messageRouter);
+app.use('/rooms', authenticateToken,  roomRouter);
+app.use('/messages', authenticateToken,  messageRouter);
 
 try { 
     mongoose.connect(process.env.URI)
-    .then(() => {
-        server.listen(5000, () => {
-            console.log(`server started`);
+        .then(() => {
+            server.listen(5000, () => {
+                console.log(`server started`);
+            })
+        }).catch((error) => {
+            console.log("server could not be started", error);
         })
-    }).catch((error) => {
-        console.log("server could not be started", error);
-    })
 } catch (error) {
     console.log(error);
 }

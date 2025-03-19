@@ -20,10 +20,6 @@ export const createRoomController = async (request, response) => {
     ) + roomCount;
   const roomAdmin = request.body.roomAdmin;
 
-  // get a random anime cover image if cover is not provided
-
-  const roomCover = request.body.roomCover ? request.body.roomCover : defaultCoverImage;
-
   const userId = await userModel.findOne({ username: roomAdmin });
   const room = await roomModel.findOne({ roomName: roomName });
 
@@ -37,7 +33,6 @@ export const createRoomController = async (request, response) => {
       roomName: roomName,
       roomId: roomId,
       roomAdmin: roomAdmin,
-      roomCover: roomCover,
     });
     newRoom.members.push({ username: roomAdmin, userId: userId._id });
     newRoom.save().then(() => {
@@ -47,12 +42,12 @@ export const createRoomController = async (request, response) => {
         room_name: roomName,
         room_id: roomId,
         roomAdmin: roomAdmin,
-        roomCover: roomCover,
       });
     });
   }
   roomCount++;
 };
+
 // *********** Search room controller ***********
 export const searchRoomsController = async (request, response) => {
   const roomName = request.body.roomName;
@@ -117,7 +112,6 @@ export const leaveRoomController = async (request, response) => {
 };
 // *********** Fetch room controller ***********
 export const fetchRoomsController = async (request, response) => {
-
   const username = request.body.username;
   var joinedRooms = [];
 

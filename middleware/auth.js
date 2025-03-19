@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import userModel from '../models/users/userModel.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = req.cookies.token
 
     if (!token) {
         console.log("⛔ No token provided");
@@ -16,7 +17,7 @@ function authenticateToken(req, res, next) {
         }
 
         const authenticateUser = await userModel.findOne({username :req.body.username });
-
+        
         if(authenticateUser) {
             if(authenticateUser._id != user.userId) {
                 console.log("⚠️ Warning: Unauthorized Access Attempted!");
