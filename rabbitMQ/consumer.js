@@ -1,30 +1,28 @@
 import { AMQPClient } from "@cloudamqp/amqp-client";
-import { io } from "../server.js";
 
-let queue;
+async function consumeEvents(io) {
+  try {
+    const amqp = new AMQPClient(
+      "amqps://bwnqlrir:mrtMVAdGWlkGxPPo6j8pWriTJZahmcUE@leopard.lmq.cloudamqp.com/bwnqlrir"
+    );
+    const conn = await amqp.connect();
+    const ch = await conn.channel();
 
-async function consumeEvents(queueName) {
-    queue = queueName;
-    try {
-        const amqp = new AMQPClient("amqps://bwnqlrir:mrtMVAdGWlkGxPPo6j8pWriTJZahmcUE@leopard.lmq.cloudamqp.com/bwnqlrir");
-        const conn = await amqp.connect();
-        const ch = await conn.channel();
+    const q = await ch.queue("song_change", { durable: true });
+    console.log(`👂 Listening for "song_change" events...`);
 
-        const q = await ch.queue(queueName, { durable: true });
-        console.log(`👂 Listening for ${queueName} events...`);
+    const consumer = await q.subscribe({ noAck: true }, async (msg) => {
+      const data = JSON.parse(msg.bodyToString());
+      console.log(`📥 Received song_change event:`, data);
 
-        const consumer = await q.subscribe({ noAck: true }, async (msg) => {
-            const data = JSON.parse(msg.bodyToString());
-            console.log(`📥 Received ${queueName} event:`, data);
+      io.to(data.roomId).emit('song_change', {trackName : data.trackName, trackUrl : data.trackUrl});
+    });
 
-            io.emit(queueName, data);
-        });
-
-        await consumer.wait();
-    } catch (err) {
-        console.error("❌ RabbitMQ Consumer Error:", err);
-        setTimeout(() => consumeEvents(queueName), 1000);
-    }
+    await consumer.wait();
+  } catch (err) {
+    console.error("❌ RabbitMQ Consumer Error:", err);
+    setTimeout(() => consumeEvents(io), 1000);
+  }
 }
 
-consumeEvents(queue);
+export default consumeEvents;
