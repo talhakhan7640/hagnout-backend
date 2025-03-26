@@ -18,7 +18,7 @@ import messageRouter from "./routes/messages/messages.js";
 // settings cors options 
 const corsOptions = {
     origin: 'https://hangout-qmom.onrender.com', // allow only this origin
-    //origin: ['http://localhost:3000', 'http://192.168.0.102:3000'],
+    //origin: "http://localhost:3000",
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
