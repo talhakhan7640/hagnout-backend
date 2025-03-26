@@ -13,6 +13,7 @@ export const getMessages = async (req, res) => {
 
 	try {
 		const room = await roomModel.findById(id);
+	
 
 		if (!room) {
 			return res.status(404).send({ message: "Room not found" });
