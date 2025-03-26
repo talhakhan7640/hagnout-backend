@@ -17,5 +17,4 @@ async function publishEvent(queueName, message) {
     }
 }
 
-
 export default publishEvent;
