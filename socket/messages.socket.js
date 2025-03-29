@@ -1,4 +1,3 @@
-import { RedisSearchLanguages } from "redis";
 import userModel from "../models/users/userModel.js";
 import { io } from "../server.js";
 
@@ -28,12 +27,4 @@ export const broadcastMessage = async (roomId, message, username) => {
     profilePic: user.profilePic,
     timestamp: datetime,
   });
-};
-
-export const realTimeTrackBroadcast = async (trackDetails) => {
-  console.log(trackDetails);
-  const { trackName, trackUrl } = trackDetails;
-  io.emit("trackDetails", { trackName, trackUrl }); // Broadcast to all clients
-  // console.log("requested track details: ", trackName, trackUrl);
-  RedisSearchLanguages;
 };
