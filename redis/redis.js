@@ -5,6 +5,8 @@ dotenv.config();
 
 const url = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSKEY}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
 
+console.log(url);
+
 const redisClient = createClient(url);
 
 redisClient.on('error', err => console.log('Redis Client Error', err));
