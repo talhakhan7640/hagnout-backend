@@ -1,9 +1,12 @@
 import { AMQPClient } from "@cloudamqp/amqp-client";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 async function consumeEvents(io) {
   try {
     const amqp = new AMQPClient(
-      "amqps://bwnqlrir:mrtMVAdGWlkGxPPo6j8pWriTJZahmcUE@leopard.lmq.cloudamqp.com/bwnqlrir"
+      process.env.RABBITMQ_KEY
     );
     const conn = await amqp.connect();
     const ch = await conn.channel();

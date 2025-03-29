@@ -1,8 +1,11 @@
 import { AMQPClient } from "@cloudamqp/amqp-client";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 async function publishEvent(queueName, message) {
     try {
-        const amqp = new AMQPClient("amqps://bwnqlrir:mrtMVAdGWlkGxPPo6j8pWriTJZahmcUE@leopard.lmq.cloudamqp.com/bwnqlrir")
+        const amqp = new AMQPClient(process.env.RABBITMQ_KEY);
         // establish a connection between RabbitMQ instance and the application
         const conn = await amqp.connect()
         const ch = await conn.channel()
