@@ -7,7 +7,7 @@ const url = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSKEY}@
 
 console.log(url);
 
-const redisClient = createClient(url);
+const redisClient = createClient({url});
 
 redisClient.on('error', err => console.log('Redis Client Error', err));
 
